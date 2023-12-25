@@ -26,11 +26,30 @@ dependencies {
     implementation 'log4j:log4j:1.2.17'
 // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     implementation 'org.apache.poi:poi-ooxml:5.2.5'
+}
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
 
+    testLogging {
+        events 'started', 'passed', 'skipped', 'failed'
+        exceptionFormat = 'full'
+        showExceptions = true
+        showCauses = true
+    }
 
+// Configure the test JVM options
+    forkEvery = 1
+    systemProperties(System.getProperties())
+
+// Exclude groups or tags that are not thread-safe
+// Example:
+    exclude 'com.example.ThreadUnsafeTest'
+
+// Exclude specific tests that are not thread-safe
+// Example:
+    exclude '**/*ThreadUnsafeTest.class'
 
 }
-
 test {
    useTestNG()
 }
